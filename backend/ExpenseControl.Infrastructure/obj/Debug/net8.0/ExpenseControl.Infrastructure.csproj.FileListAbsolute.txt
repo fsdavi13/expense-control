@@ -14,3 +14,5 @@ D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.In
 D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\refint\ExpenseControl.Infrastructure.dll
 D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\ExpenseControl.Infrastructure.pdb
 D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\ref\ExpenseControl.Infrastructure.dll
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\bin\Debug\net8.0\ExpenseControl.Infrastructure.runtimeconfig.json
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\ExpenseControl.Infrastructure.genruntimeconfig.cache
