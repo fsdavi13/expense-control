@@ -1,0 +1,12 @@
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Domain\obj\Debug\net8.0\ExpenseControl.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Domain\obj\Debug\net8.0\ExpenseControl.Domain.AssemblyInfoInputs.cache
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Domain\obj\Debug\net8.0\ExpenseControl.Domain.AssemblyInfo.cs
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Domain\obj\Debug\net8.0\ExpenseControl.Domain.csproj.CoreCompileInputs.cache
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Domain\obj\Debug\net8.0\ExpenseControl.Domain.sourcelink.json
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Domain\bin\Debug\net8.0\ExpenseControl.Domain.deps.json
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Domain\bin\Debug\net8.0\ExpenseControl.Domain.dll
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Domain\bin\Debug\net8.0\ExpenseControl.Domain.pdb
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Domain\obj\Debug\net8.0\ExpenseControl.Domain.dll
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Domain\obj\Debug\net8.0\refint\ExpenseControl.Domain.dll
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Domain\obj\Debug\net8.0\ExpenseControl.Domain.pdb
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Domain\obj\Debug\net8.0\ref\ExpenseControl.Domain.dll

@@ -107,6 +107,42 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
+      },
+      "ExpenseControl.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "ExpenseControl.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ExpenseControl.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ExpenseControl.Application.dll": {}
+        }
+      },
+      "ExpenseControl.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/ExpenseControl.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ExpenseControl.Domain.dll": {}
+        }
+      },
+      "ExpenseControl.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "ExpenseControl.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ExpenseControl.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ExpenseControl.Infrastructure.dll": {}
+        }
       }
     }
   },
@@ -473,10 +509,27 @@
         "swashbuckle.aspnetcore.swaggerui.6.6.2.nupkg.sha512",
         "swashbuckle.aspnetcore.swaggerui.nuspec"
       ]
+    },
+    "ExpenseControl.Application/1.0.0": {
+      "type": "project",
+      "path": "../ExpenseControl.Application/ExpenseControl.Application.csproj",
+      "msbuildProject": "../ExpenseControl.Application/ExpenseControl.Application.csproj"
+    },
+    "ExpenseControl.Domain/1.0.0": {
+      "type": "project",
+      "path": "../ExpenseControl.Domain/ExpenseControl.Domain.csproj",
+      "msbuildProject": "../ExpenseControl.Domain/ExpenseControl.Domain.csproj"
+    },
+    "ExpenseControl.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../ExpenseControl.Infrastructure/ExpenseControl.Infrastructure.csproj",
+      "msbuildProject": "../ExpenseControl.Infrastructure/ExpenseControl.Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "ExpenseControl.Application >= 1.0.0",
+      "ExpenseControl.Infrastructure >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 8.0.29",
       "Swashbuckle.AspNetCore >= 6.6.2"
     ]
@@ -505,7 +558,14 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\OneDrive\\Área de Trabalho\\desafios\\expense-control\\backend\\ExpenseControl.Application\\ExpenseControl.Application.csproj": {
+              "projectPath": "D:\\OneDrive\\Área de Trabalho\\desafios\\expense-control\\backend\\ExpenseControl.Application\\ExpenseControl.Application.csproj"
+            },
+            "D:\\OneDrive\\Área de Trabalho\\desafios\\expense-control\\backend\\ExpenseControl.Infrastructure\\ExpenseControl.Infrastructure.csproj": {
+              "projectPath": "D:\\OneDrive\\Área de Trabalho\\desafios\\expense-control\\backend\\ExpenseControl.Infrastructure\\ExpenseControl.Infrastructure.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

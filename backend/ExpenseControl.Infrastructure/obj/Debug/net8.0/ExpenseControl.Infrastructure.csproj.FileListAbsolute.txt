@@ -1,0 +1,16 @@
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\bin\Debug\net8.0\ExpenseControl.Infrastructure.deps.json
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\bin\Debug\net8.0\ExpenseControl.Infrastructure.dll
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\bin\Debug\net8.0\ExpenseControl.Infrastructure.pdb
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\bin\Debug\net8.0\ExpenseControl.Domain.dll
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\bin\Debug\net8.0\ExpenseControl.Domain.pdb
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\ExpenseControl.Infrastructure.csproj.AssemblyReference.cache
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\ExpenseControl.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\ExpenseControl.Infrastructure.AssemblyInfoInputs.cache
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\ExpenseControl.Infrastructure.AssemblyInfo.cs
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\ExpenseControl.Infrastructure.csproj.CoreCompileInputs.cache
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\ExpenseControl.Infrastructure.sourcelink.json
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\ExpenseC.63699D0C.Up2Date
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\ExpenseControl.Infrastructure.dll
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\refint\ExpenseControl.Infrastructure.dll
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\ExpenseControl.Infrastructure.pdb
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Infrastructure\obj\Debug\net8.0\ref\ExpenseControl.Infrastructure.dll

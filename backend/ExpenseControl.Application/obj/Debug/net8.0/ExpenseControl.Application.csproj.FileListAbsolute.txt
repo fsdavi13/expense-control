@@ -1,0 +1,16 @@
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\bin\Debug\net8.0\ExpenseControl.Application.deps.json
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\bin\Debug\net8.0\ExpenseControl.Application.dll
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\bin\Debug\net8.0\ExpenseControl.Application.pdb
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\bin\Debug\net8.0\ExpenseControl.Domain.dll
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\bin\Debug\net8.0\ExpenseControl.Domain.pdb
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\obj\Debug\net8.0\ExpenseControl.Application.csproj.AssemblyReference.cache
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\obj\Debug\net8.0\ExpenseControl.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\obj\Debug\net8.0\ExpenseControl.Application.AssemblyInfoInputs.cache
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\obj\Debug\net8.0\ExpenseControl.Application.AssemblyInfo.cs
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\obj\Debug\net8.0\ExpenseControl.Application.csproj.CoreCompileInputs.cache
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\obj\Debug\net8.0\ExpenseControl.Application.sourcelink.json
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\obj\Debug\net8.0\ExpenseC.866E881D.Up2Date
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\obj\Debug\net8.0\ExpenseControl.Application.dll
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\obj\Debug\net8.0\refint\ExpenseControl.Application.dll
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\obj\Debug\net8.0\ExpenseControl.Application.pdb
+D:\OneDrive\Área de Trabalho\desafios\expense-control\backend\ExpenseControl.Application\obj\Debug\net8.0\ref\ExpenseControl.Application.dll
