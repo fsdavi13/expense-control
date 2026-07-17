@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\ExpenseControl.Api.props" />
-</Project>
