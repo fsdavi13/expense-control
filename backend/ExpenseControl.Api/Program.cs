@@ -1,16 +1,13 @@
+using ExpenseControl.Api.Middleware;
+using ExpenseControl.Application.DependencyInjection;
 using ExpenseControl.Infrastructure.Data;
+using ExpenseControl.Infrastructure.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Registra o contexto responsável pela comunicação com o banco.
-// A conexão é obtida pelo arquivo de configuração para evitar
-// valores fixos dentro do código.
-builder.Services.AddDbContext<ExpenseControlDbContext>(options =>
-{
-    options.UseSqlite(
-        builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 
@@ -19,11 +16,22 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Garante que o banco seja criado e atualizado antes de receber requisições.
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider
+        .GetRequiredService<ExpenseControlDbContext>();
+
+    await dbContext.Database.MigrateAsync();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 

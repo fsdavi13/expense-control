@@ -17,10 +17,19 @@ public sealed class PersonService : IPersonService
 
     public async Task<PersonResponseDto> CreateAsync(CreatePersonDto dto)
     {
+        if (string.IsNullOrWhiteSpace(dto.Name))
+        {
+            throw new BusinessException("O nome da pessoa é obrigatório.");
+        }
+
+        if (dto.Age < 0 || dto.Age > 120)
+        {
+            throw new BusinessException("Informe uma idade válida.");
+        }
+
         var person = new Person(
             dto.Name.Trim(),
-            dto.Age
-        );
+            dto.Age);
 
         await _personRepository.AddAsync(person);
 
@@ -40,10 +49,9 @@ public sealed class PersonService : IPersonService
     {
         var person = await _personRepository.GetByIdAsync(id);
 
-        // Uma pessoa só pode ser removida caso exista no sistema.
         if (person is null)
         {
-            throw new BusinessException("Pessoa não encontrada.");
+            throw new NotFoundException("Pessoa não encontrada.");
         }
 
         await _personRepository.DeleteAsync(person);

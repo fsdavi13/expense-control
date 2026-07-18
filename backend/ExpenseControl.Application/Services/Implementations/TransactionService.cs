@@ -23,28 +23,27 @@ public sealed class TransactionService : ITransactionService
     public async Task<TransactionResponseDto> CreateAsync(
         CreateTransactionDto dto)
     {
+        ValidateTransaction(dto);
+
         var person = await _personRepository.GetByIdAsync(dto.PersonId);
 
-        // A transação só pode ser criada para uma pessoa cadastrada.
         if (person is null)
         {
-            throw new BusinessException("Pessoa não encontrada.");
+            throw new NotFoundException("Pessoa não encontrada.");
         }
 
         // Menores de idade podem cadastrar apenas despesas.
         if (person.Age < 18 && dto.Type == TransactionType.Income)
         {
             throw new BusinessException(
-                "Menores de idade não podem cadastrar receitas."
-            );
+                "Menores de idade não podem cadastrar receitas.");
         }
 
         var transaction = new Transaction(
             dto.Description.Trim(),
             dto.Amount,
             dto.Type,
-            dto.PersonId
-        );
+            dto.PersonId);
 
         await _transactionRepository.AddAsync(transaction);
 
@@ -58,6 +57,33 @@ public sealed class TransactionService : ITransactionService
         return transactions
             .Select(MapToResponse)
             .ToList();
+    }
+
+    private static void ValidateTransaction(CreateTransactionDto dto)
+    {
+        if (string.IsNullOrWhiteSpace(dto.Description))
+        {
+            throw new BusinessException(
+                "A descrição da transação é obrigatória.");
+        }
+
+        if (dto.Amount <= 0)
+        {
+            throw new BusinessException(
+                "O valor da transação deve ser maior que zero.");
+        }
+
+        if (!Enum.IsDefined(dto.Type))
+        {
+            throw new BusinessException(
+                "O tipo da transação é inválido.");
+        }
+
+        if (dto.PersonId <= 0)
+        {
+            throw new BusinessException(
+                "Informe uma pessoa válida.");
+        }
     }
 
     private static TransactionResponseDto MapToResponse(
