@@ -2,26 +2,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 WORKDIR /src
 
-COPY ExpenseControl.sln ./
-
-COPY ExpenseControl.Api/ExpenseControl.Api.csproj \
-    ExpenseControl.Api/
-
-COPY ExpenseControl.Application/ExpenseControl.Application.csproj \
-    ExpenseControl.Application/
-
-COPY ExpenseControl.Domain/ExpenseControl.Domain.csproj \
-    ExpenseControl.Domain/
-
-COPY ExpenseControl.Infrastructure/ExpenseControl.Infrastructure.csproj \
-    ExpenseControl.Infrastructure/
-
-COPY ExpenseControl.Tests/ExpenseControl.Tests.csproj \
-    ExpenseControl.Tests/
-
-RUN dotnet restore ExpenseControl.sln
-
 COPY . .
+
+RUN dotnet restore ExpenseControl.Api/ExpenseControl.Api.csproj
 
 RUN dotnet publish \
     ExpenseControl.Api/ExpenseControl.Api.csproj \
