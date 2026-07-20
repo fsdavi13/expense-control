@@ -1,42 +1,77 @@
-import { useEffect, useState } from "react";
-import { personService } from "./services/personService";
-import type { Person } from "./types/person";
+import { useState } from "react";
+import { PersonsPage } from "./pages/PersonsPage";
+import { TotalsPage } from "./pages/TotalsPage";
+import { TransactionsPage } from "./pages/TransactionsPage";
+
+type Page = "persons" | "transactions" | "totals";
 
 function App() {
-  const [persons, setPersons] = useState<Person[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    async function loadPersons() {
-      try {
-        const data = await personService.getAll();
-
-        setPersons(data);
-      } catch {
-        setError("Não foi possível conectar ao backend.");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    void loadPersons();
-  }, []);
+  const [currentPage, setCurrentPage] =
+    useState<Page>("persons");
 
   return (
-    <main className="app">
-      <h1>Controle de Gastos</h1>
+    <main className="app-shell">
+      <aside className="sidebar">
+        <div className="brand">
+          <span className="brand-icon">$</span>
 
-      {isLoading && <p>Carregando pessoas...</p>}
+          <div>
+            <strong>Expense Control</strong>
+            <small>Gestão residencial</small>
+          </div>
+        </div>
 
-      {error && <p>{error}</p>}
+        <nav
+          className="navigation"
+          aria-label="Navegação principal"
+        >
+          <button
+            className={
+              currentPage === "persons"
+                ? "navigation-item active"
+                : "navigation-item"
+            }
+            type="button"
+            onClick={() => setCurrentPage("persons")}
+          >
+            Pessoas
+          </button>
 
-      {!isLoading && !error && (
-        <p>
-          Backend conectado. Pessoas cadastradas:{" "}
-          <strong>{persons.length}</strong>
-        </p>
-      )}
+          <button
+            className={
+              currentPage === "transactions"
+                ? "navigation-item active"
+                : "navigation-item"
+            }
+            type="button"
+            onClick={() => setCurrentPage("transactions")}
+          >
+            Transações
+          </button>
+
+          <button
+            className={
+              currentPage === "totals"
+                ? "navigation-item active"
+                : "navigation-item"
+            }
+            type="button"
+            onClick={() => setCurrentPage("totals")}
+          >
+            Totais
+          </button>
+        </nav>
+      </aside>
+
+      <div className="main-content">
+        {currentPage === "persons" && <PersonsPage />}
+
+        {currentPage === "transactions" && (
+          <TransactionsPage />
+        )}
+
+        {currentPage === "totals" && <TotalsPage />}
+      </div>
     </main>
   );
 }

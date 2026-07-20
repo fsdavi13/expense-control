@@ -1,0 +1,87 @@
+.transaction-content-grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.transaction-form {
+  display: grid;
+  gap: 18px;
+}
+
+.form-field select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  outline: none;
+  color: #172033;
+  background: #ffffff;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.form-field select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 13%);
+}
+
+.form-hint {
+  margin: -6px 0 0;
+  padding: 11px 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: #92400e;
+  background: #fffbeb;
+}
+
+.transaction-description {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.transaction-description small {
+  color: #64748b;
+}
+
+.transaction-type {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.transaction-type.income {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.transaction-type.expense {
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+.value-column {
+  text-align: right;
+  white-space: nowrap;
+  font-weight: 800;
+}
+
+.income-value {
+  color: #15803d;
+}
+
+.expense-value {
+  color: #b91c1c;
+}
+
+@media (max-width: 1000px) {
+  .transaction-content-grid {
+    grid-template-columns: 1fr;
+  }
+}
