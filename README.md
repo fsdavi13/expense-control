@@ -4,6 +4,11 @@ Sistema web para controle de gastos residenciais, desenvolvido com ASP.NET Core,
 
 A aplicação permite cadastrar moradores, registrar receitas e despesas e acompanhar os totais financeiros individuais e gerais da residência.
 
+## 🌐 Aplicação online
+
+* [Acessar a aplicação](https://expense-control-one.vercel.app)
+* [Documentação da API](https://expense-control-production-acff.up.railway.app/swagger)
+
 ## 🚀 Funcionalidades
 
 ### Pessoas
@@ -20,8 +25,8 @@ A aplicação permite cadastrar moradores, registrar receitas e despesas e acomp
 * Associação obrigatória da transação a uma pessoa existente;
 * Listagem das transações cadastradas;
 * Validação de descrição e valor;
-* Bloqueio de receitas para menores de 18 anos.
-* Exclusão individual de transações com confirmação;
+* Bloqueio de receitas para menores de 18 anos;
+* Exclusão individual de transações com confirmação.
 
 ### Totais
 
@@ -50,6 +55,9 @@ A aplicação permite cadastrar moradores, registrar receitas e despesas e acomp
 * C#
 * Entity Framework Core
 * SQLite
+* PostgreSQL
+* Supabase
+* Railway
 * Swagger
 * xUnit
 * Moq
@@ -61,6 +69,7 @@ A aplicação permite cadastrar moradores, registrar receitas e despesas e acomp
 * Vite
 * Axios
 * CSS
+* Vercel
 
 ## 🧱 Arquitetura
 
@@ -106,7 +115,7 @@ Repository
     ↓
 Entity Framework Core
     ↓
-SQLite
+SQLite ou PostgreSQL
 ```
 
 ## 📁 Estrutura do frontend
@@ -125,7 +134,7 @@ frontend/
 └── vite.config.ts
 ```
 
-## ▶️ Como executar
+## ▶️ Como executar localmente
 
 ### Pré-requisitos
 
@@ -174,7 +183,7 @@ O script iniciará automaticamente:
 * a API ASP.NET Core;
 * o frontend React.
 
-A aplicação estará disponível em:
+A aplicação será iniciada pelo Vite, normalmente em:
 
 ```text
 http://localhost:5173
@@ -190,13 +199,25 @@ Para encerrar a aplicação, feche os dois terminais abertos pelo script.
 
 ## ⚙️ Variáveis de ambiente
 
-O frontend utiliza a variável:
+### Frontend
 
 ```env
 VITE_API_URL=http://localhost:5062/api
 ```
 
-O arquivo `.env.example` já contém a configuração necessária para execução local.
+O arquivo `.env.example` contém a configuração necessária para execução local.
+
+### Backend em produção
+
+O ambiente publicado utiliza variáveis para definir:
+
+```text
+DatabaseProvider
+ConnectionStrings__DefaultConnection
+FrontendUrl
+```
+
+As credenciais do banco não são armazenadas no código-fonte.
 
 ## 🔗 Endpoints principais
 
@@ -223,6 +244,12 @@ DELETE /api/transactions/{id}
 GET /api/totals
 ```
 
+### Saúde da API
+
+```text
+GET /health
+```
+
 ## 🧪 Testes
 
 Para executar os testes do backend:
@@ -232,7 +259,7 @@ cd backend
 dotnet test
 ```
 
-O projeto possui testes para as principais regras de negócio, incluindo:
+O projeto possui 28 testes automatizados para as principais regras de negócio, incluindo:
 
 * criação de pessoas;
 * validação de nome e idade;
@@ -241,6 +268,7 @@ O projeto possui testes para as principais regras de negócio, incluindo:
 * bloqueio de receitas para menores;
 * bloqueio da alteração de adulto com receitas para menor;
 * criação de transações;
+* exclusão individual de transações;
 * exclusão de pessoas;
 * cálculo dos totais.
 
@@ -264,9 +292,17 @@ npm run build
 
 ## 💾 Persistência
 
-Os dados são armazenados em um banco SQLite e permanecem disponíveis após o encerramento da aplicação.
+Em desenvolvimento local, a aplicação utiliza SQLite.
 
-O banco é criado e atualizado automaticamente durante a execução da API.
+No ambiente publicado, os dados são armazenados em PostgreSQL no Supabase.
+
+O backend publicado no Railway acessa o banco por meio do Entity Framework Core, e os dados permanecem disponíveis após reinicializações e novos acessos à aplicação.
+
+## 🚢 Deploy
+
+* Frontend: Vercel
+* Backend: Railway
+* Banco de dados: Supabase PostgreSQL
 
 ## 👨‍💻 Autor
 
