@@ -4,6 +4,12 @@ using ExpenseControl.Infrastructure.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var databaseProvider =
+    builder.Configuration["DatabaseProvider"] ?? "não configurado";
+
+Console.WriteLine(
+    $"Database provider configurado: {databaseProvider}");
+
 const string FrontendCorsPolicy = "Frontend";
 
 var railwayPort = Environment.GetEnvironmentVariable("PORT");
