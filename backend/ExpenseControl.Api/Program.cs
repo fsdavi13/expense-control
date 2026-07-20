@@ -6,6 +6,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 const string FrontendCorsPolicy = "Frontend";
 
+var railwayPort = Environment.GetEnvironmentVariable("PORT");
+
+if (!string.IsNullOrWhiteSpace(railwayPort))
+{
+    // O Railway fornece a porta dinamicamente em produção.
+    builder.WebHost.UseUrls($"http://0.0.0.0:{railwayPort}");
+}
+
+var frontendUrl =
+    builder.Configuration["FrontendUrl"]
+    ?? "http://localhost:5173";
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -16,31 +28,34 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins("http://localhost:5173")
+                .WithOrigins(frontendUrl.TrimEnd('/'))
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
 });
 
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// O Swagger permanece disponível no deploy para facilitar
+// a avaliação e os testes da API.
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-
-app.UseHttpsRedirection();
 
 app.UseCors(FrontendCorsPolicy);
 
 app.MapControllers();
+
+app.MapGet(
+    "/health",
+    () => Results.Ok(new
+    {
+        status = "healthy"
+    }));
 
 app.Run();

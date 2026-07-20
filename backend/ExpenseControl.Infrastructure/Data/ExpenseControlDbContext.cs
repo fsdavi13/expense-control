@@ -5,23 +5,21 @@ namespace ExpenseControl.Infrastructure.Data;
 
 public class ExpenseControlDbContext : DbContext
 {
-    public DbSet<Person> Persons { get; set; }
-
-    public DbSet<Transaction> Transactions { get; set; }
-
-    public ExpenseControlDbContext(
-        DbContextOptions<ExpenseControlDbContext> options)
+    public ExpenseControlDbContext(DbContextOptions options)
         : base(options)
     {
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public DbSet<Person> Persons => Set<Person>();
+
+    public DbSet<Transaction> Transactions => Set<Transaction>();
+
+    protected override void OnModelCreating(
+        ModelBuilder modelBuilder)
     {
-        // As configurações das entidades ficam separadas
-        // para manter o DbContext organizado e facilitar manutenção.
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(ExpenseControlDbContext).Assembly);
-
-        base.OnModelCreating(modelBuilder);
     }
 }

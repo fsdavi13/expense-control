@@ -7,26 +7,47 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ExpenseControl.Infrastructure.DependencyInjection;
 
-public static class DependencyInjection
+public static class InfrastructureDependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(
+        public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString(
-            "DefaultConnection");
+        var databaseProvider =
+            configuration["DatabaseProvider"] ?? "Sqlite";
 
-        if (string.IsNullOrWhiteSpace(connectionString))
+        var connectionString =
+            configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException(
+                "A string de conexão do banco não foi configurada.");
+
+        if (
+            databaseProvider.Equals(
+                "Postgres",
+                StringComparison.OrdinalIgnoreCase)
+        )
         {
-            throw new InvalidOperationException(
-                "A connection string 'DefaultConnection' não foi configurada.");
+            services.AddDbContext<PostgresExpenseControlDbContext>(
+                options => options.UseNpgsql(connectionString));
+
+            // Os repositórios continuam dependendo do contexto principal,
+            // mas em produção recebem a instância configurada para PostgreSQL.
+            services.AddScoped<ExpenseControlDbContext>(
+                provider =>
+                    provider.GetRequiredService<
+                        PostgresExpenseControlDbContext>());
+        }
+        else
+        {
+            services.AddDbContext<ExpenseControlDbContext>(
+                options => options.UseSqlite(connectionString));
         }
 
-        services.AddDbContext<ExpenseControlDbContext>(options =>
-            options.UseSqlite(connectionString));
-
         services.AddScoped<IPersonRepository, PersonRepository>();
-        services.AddScoped<ITransactionRepository, TransactionRepository>();
+
+        services.AddScoped<
+            ITransactionRepository,
+            TransactionRepository>();
 
         return services;
     }
