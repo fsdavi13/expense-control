@@ -1,13 +1,26 @@
 using ExpenseControl.Api.Middleware;
 using ExpenseControl.Application.DependencyInjection;
-using ExpenseControl.Infrastructure.Data;
 using ExpenseControl.Infrastructure.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+const string FrontendCorsPolicy = "Frontend";
+
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        FrontendCorsPolicy,
+        policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
 builder.Services.AddControllers();
 
@@ -15,15 +28,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
-
-// Garante que o banco seja criado e atualizado antes de receber requisições.
-using (var scope = app.Services.CreateScope())
-{
-    var dbContext = scope.ServiceProvider
-        .GetRequiredService<ExpenseControlDbContext>();
-
-    await dbContext.Database.MigrateAsync();
-}
 
 if (app.Environment.IsDevelopment())
 {
@@ -34,6 +38,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseHttpsRedirection();
+
+app.UseCors(FrontendCorsPolicy);
 
 app.MapControllers();
 
