@@ -336,4 +336,56 @@ public sealed class TransactionServiceTests
         Assert.Equal(TransactionType.Expense, result[1].Type);
         Assert.Equal(1, result[1].PersonId);
     }
+    
+    [Fact]
+    public async Task DeleteAsync_ShouldDeleteTransaction_WhenTransactionExists()
+    {
+        var transaction =
+            TestEntityFactory.CreateTransaction(
+                id: 1,
+                description: "Conta de energia",
+                amount: 250m,
+                type: TransactionType.Expense,
+                personId: 1);
+
+        _transactionRepositoryMock
+            .Setup(repository =>
+                repository.GetByIdAsync(1))
+            .ReturnsAsync(transaction);
+
+        _transactionRepositoryMock
+            .Setup(repository =>
+                repository.DeleteAsync(transaction))
+            .Returns(Task.CompletedTask);
+
+        await _transactionService.DeleteAsync(1);
+
+        _transactionRepositoryMock.Verify(
+            repository =>
+                repository.DeleteAsync(transaction),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task DeleteAsync_ShouldThrowNotFoundException_WhenTransactionDoesNotExist()
+    {
+        _transactionRepositoryMock
+            .Setup(repository =>
+                repository.GetByIdAsync(999))
+            .ReturnsAsync((Transaction?)null);
+
+        var exception =
+            await Assert.ThrowsAsync<NotFoundException>(
+                () => _transactionService.DeleteAsync(999));
+
+        Assert.Equal(
+            "Transação não encontrada.",
+            exception.Message);
+
+        _transactionRepositoryMock.Verify(
+            repository =>
+                repository.DeleteAsync(
+                    It.IsAny<Transaction>()),
+            Times.Never);
+    }
 }

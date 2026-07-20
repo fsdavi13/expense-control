@@ -9,4 +9,8 @@ public interface ITransactionRepository
     Task<List<Transaction>> GetAllAsync();
 
     Task<List<Transaction>> GetByPersonIdAsync(int personId);
+
+    Task<Transaction?> GetByIdAsync(int id);
+
+    Task DeleteAsync(Transaction transaction);
 }

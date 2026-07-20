@@ -7,10 +7,14 @@ using ExpenseControl.Domain.Repositories;
 
 namespace ExpenseControl.Application.Services.Implementations;
 
-public sealed class TransactionService : ITransactionService
+public sealed class TransactionService
+    : ITransactionService
 {
-    private readonly ITransactionRepository _transactionRepository;
-    private readonly IPersonRepository _personRepository;
+    private readonly ITransactionRepository
+        _transactionRepository;
+
+    private readonly IPersonRepository
+        _personRepository;
 
     public TransactionService(
         ITransactionRepository transactionRepository,
@@ -25,15 +29,21 @@ public sealed class TransactionService : ITransactionService
     {
         ValidateTransaction(dto);
 
-        var person = await _personRepository.GetByIdAsync(dto.PersonId);
+        var person = await _personRepository
+            .GetByIdAsync(dto.PersonId);
 
+        // A transação só pode ser criada para uma pessoa cadastrada.
         if (person is null)
         {
-            throw new NotFoundException("Pessoa não encontrada.");
+            throw new NotFoundException(
+                "Pessoa não encontrada.");
         }
 
         // Menores de idade podem cadastrar apenas despesas.
-        if (person.Age < 18 && dto.Type == TransactionType.Income)
+        if (
+            person.Age < 18
+            && dto.Type == TransactionType.Income
+        )
         {
             throw new BusinessException(
                 "Menores de idade não podem cadastrar receitas.");
@@ -50,16 +60,36 @@ public sealed class TransactionService : ITransactionService
         return MapToResponse(transaction);
     }
 
-    public async Task<List<TransactionResponseDto>> GetAllAsync()
+    public async Task<List<TransactionResponseDto>>
+        GetAllAsync()
     {
-        var transactions = await _transactionRepository.GetAllAsync();
+        var transactions =
+            await _transactionRepository.GetAllAsync();
 
         return transactions
             .Select(MapToResponse)
             .ToList();
     }
 
-    private static void ValidateTransaction(CreateTransactionDto dto)
+    public async Task DeleteAsync(int id)
+    {
+        var transaction =
+            await _transactionRepository.GetByIdAsync(id);
+
+        if (transaction is null)
+        {
+            throw new NotFoundException(
+                "Transação não encontrada.");
+        }
+
+        // Apenas a transação selecionada é removida.
+        // A pessoa e suas outras movimentações são preservadas.
+        await _transactionRepository.DeleteAsync(
+            transaction);
+    }
+
+    private static void ValidateTransaction(
+        CreateTransactionDto dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Description))
         {

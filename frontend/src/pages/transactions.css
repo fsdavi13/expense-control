@@ -80,6 +80,11 @@
   color: #b91c1c;
 }
 
+.transaction-actions-column {
+  width: 100px;
+  text-align: right;
+}
+
 @media (max-width: 1000px) {
   .transaction-content-grid {
     grid-template-columns: 1fr;

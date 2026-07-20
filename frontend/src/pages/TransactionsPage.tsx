@@ -18,6 +18,8 @@ export function TransactionsPage() {
   >([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletingTransactionId, setDeletingTransactionId] =
+    useState<number | null>(null);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -67,8 +69,8 @@ export function TransactionsPage() {
         await transactionService.create(transaction);
 
       setTransactions((currentTransactions) => [
-        ...currentTransactions,
         createdTransaction,
+        ...currentTransactions,
       ]);
 
       setSuccessMessage(
@@ -90,12 +92,64 @@ export function TransactionsPage() {
     }
   }
 
+  async function handleDelete(transaction: Transaction) {
+    const personName =
+      persons.find(
+        (person) => person.id === transaction.personId,
+      )?.name ?? "pessoa não encontrada";
+
+    const transactionType =
+      transaction.type === 1 ? "receita" : "despesa";
+
+    const confirmed = window.confirm(
+      `Excluir a ${transactionType} "${transaction.description}" de ${personName}?`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      setDeletingTransactionId(transaction.id);
+      setError("");
+      setSuccessMessage("");
+
+      await transactionService.delete(transaction.id);
+
+      // Remove somente o lançamento confirmado, preservando
+      // a pessoa e todas as outras transações cadastradas.
+      setTransactions((currentTransactions) =>
+        currentTransactions.filter(
+          (currentTransaction) =>
+            currentTransaction.id !== transaction.id,
+        ),
+      );
+
+      setSuccessMessage(
+        "Transação excluída com sucesso.",
+      );
+    } catch (requestError) {
+      setError(
+        getErrorMessage(
+          requestError,
+          "Não foi possível excluir a transação.",
+        ),
+      );
+    } finally {
+      setDeletingTransactionId(null);
+    }
+  }
+
   return (
     <div className="page">
       <header className="page-header">
         <div>
-          <span className="eyebrow">Controle residencial</span>
+          <span className="eyebrow">
+            Controle residencial
+          </span>
+
           <h1>Transações</h1>
+
           <p>
             Registre receitas e despesas vinculadas às pessoas
             cadastradas.
@@ -115,7 +169,10 @@ export function TransactionsPage() {
       )}
 
       {successMessage && (
-        <div className="feedback feedback-success" role="status">
+        <div
+          className="feedback feedback-success"
+          role="status"
+        >
           {successMessage}
         </div>
       )}
@@ -135,6 +192,8 @@ export function TransactionsPage() {
           <TransactionList
             transactions={transactions}
             persons={persons}
+            deletingTransactionId={deletingTransactionId}
+            onDelete={handleDelete}
           />
         </div>
       )}

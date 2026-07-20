@@ -5,16 +5,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseControl.Infrastructure.Repositories;
 
-public sealed class TransactionRepository : ITransactionRepository
+public sealed class TransactionRepository
+    : ITransactionRepository
 {
     private readonly ExpenseControlDbContext _context;
 
-    public TransactionRepository(ExpenseControlDbContext context)
+    public TransactionRepository(
+        ExpenseControlDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Transaction> AddAsync(Transaction transaction)
+    public async Task<Transaction> AddAsync(
+        Transaction transaction)
     {
         await _context.Transactions.AddAsync(transaction);
         await _context.SaveChangesAsync();
@@ -30,11 +33,28 @@ public sealed class TransactionRepository : ITransactionRepository
             .ToListAsync();
     }
 
-    public async Task<List<Transaction>> GetByPersonIdAsync(int personId)
+    public async Task<List<Transaction>> GetByPersonIdAsync(
+        int personId)
     {
         return await _context.Transactions
             .AsNoTracking()
-            .Where(transaction => transaction.PersonId == personId)
+            .Where(transaction =>
+                transaction.PersonId == personId)
             .ToListAsync();
+    }
+
+    public async Task<Transaction?> GetByIdAsync(int id)
+    {
+        return await _context.Transactions
+            .FirstOrDefaultAsync(transaction =>
+                transaction.Id == id);
+    }
+
+    public async Task DeleteAsync(
+        Transaction transaction)
+    {
+        _context.Transactions.Remove(transaction);
+
+        await _context.SaveChangesAsync();
     }
 }

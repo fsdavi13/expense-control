@@ -23,4 +23,8 @@ export const transactionService = {
 
     return response.data;
   },
+
+  async delete(id: number): Promise<void> {
+    await api.delete(`${endpoint}/${id}`);
+  },
 };

@@ -7,6 +7,8 @@ import {
 interface TransactionListProps {
   transactions: Transaction[];
   persons: Person[];
+  deletingTransactionId: number | null;
+  onDelete: (transaction: Transaction) => Promise<void>;
 }
 
 const currencyFormatter = new Intl.NumberFormat("pt-BR", {
@@ -17,6 +19,8 @@ const currencyFormatter = new Intl.NumberFormat("pt-BR", {
 export function TransactionList({
   transactions,
   persons,
+  deletingTransactionId,
+  onDelete,
 }: TransactionListProps) {
   function getPersonName(personId: number): string {
     return (
@@ -41,6 +45,7 @@ export function TransactionList({
       {transactions.length === 0 ? (
         <div className="empty-state">
           <strong>Nenhuma transação cadastrada</strong>
+
           <p>
             Use o formulário para adicionar a primeira
             movimentação.
@@ -55,6 +60,9 @@ export function TransactionList({
                 <th>Pessoa</th>
                 <th>Tipo</th>
                 <th className="value-column">Valor</th>
+                <th className="transaction-actions-column">
+                  Ações
+                </th>
               </tr>
             </thead>
 
@@ -63,16 +71,24 @@ export function TransactionList({
                 const isIncome =
                   transaction.type === TransactionType.Income;
 
+                const isDeleting =
+                  deletingTransactionId === transaction.id;
+
                 return (
                   <tr key={transaction.id}>
                     <td>
                       <div className="transaction-description">
-                        <strong>{transaction.description}</strong>
+                        <strong>
+                          {transaction.description}
+                        </strong>
+
                         <small>ID #{transaction.id}</small>
                       </div>
                     </td>
 
-                    <td>{getPersonName(transaction.personId)}</td>
+                    <td>
+                      {getPersonName(transaction.personId)}
+                    </td>
 
                     <td>
                       <span
@@ -97,6 +113,21 @@ export function TransactionList({
                       {currencyFormatter.format(
                         transaction.amount,
                       )}
+                    </td>
+
+                    <td className="transaction-actions-column">
+                      <button
+                        className="danger-button"
+                        type="button"
+                        disabled={isDeleting}
+                        onClick={() =>
+                          void onDelete(transaction)
+                        }
+                      >
+                        {isDeleting
+                          ? "Excluindo..."
+                          : "Excluir"}
+                      </button>
                     </td>
                   </tr>
                 );
