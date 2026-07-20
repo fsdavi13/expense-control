@@ -8,5 +8,9 @@ public interface IPersonService
 
     Task<List<PersonResponseDto>> GetAllAsync();
 
+    Task<PersonResponseDto> UpdateAsync(
+        int id,
+        UpdatePersonDto dto);
+
     Task DeleteAsync(int id);
 }

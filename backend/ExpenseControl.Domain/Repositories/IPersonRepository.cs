@@ -12,5 +12,7 @@ public interface IPersonRepository
 
     Task<bool> ExistsAsync(int id);
 
+    Task<Person> UpdateAsync(Person person);
+
     Task DeleteAsync(Person person);
 }

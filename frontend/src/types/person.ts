@@ -8,3 +8,8 @@ export interface CreatePerson {
   name: string;
   age: number;
 }
+
+export interface UpdatePerson {
+  name: string;
+  age: number;
+}

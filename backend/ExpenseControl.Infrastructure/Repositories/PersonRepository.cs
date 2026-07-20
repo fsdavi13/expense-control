@@ -42,6 +42,15 @@ public sealed class PersonRepository : IPersonRepository
             .AnyAsync(person => person.Id == id);
     }
 
+    public async Task<Person> UpdateAsync(Person person)
+    {
+        // A entidade já foi carregada e está sendo rastreada pelo
+        // mesmo DbContext, portanto basta persistir as alterações.
+        await _context.SaveChangesAsync();
+
+        return person;
+    }
+
     public async Task DeleteAsync(Person person)
     {
         _context.Persons.Remove(person);

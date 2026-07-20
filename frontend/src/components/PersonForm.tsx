@@ -1,17 +1,35 @@
 import { useState, type FormEvent } from "react";
-import type { CreatePerson } from "../types/person";
+import type {
+  CreatePerson,
+  Person,
+  UpdatePerson,
+} from "../types/person";
 
 interface PersonFormProps {
+  editingPerson: Person | null;
   isSubmitting: boolean;
-  onSubmit: (person: CreatePerson) => Promise<boolean>;
+  onCreate: (person: CreatePerson) => Promise<boolean>;
+  onUpdate: (
+    id: number,
+    person: UpdatePerson,
+  ) => Promise<boolean>;
+  onCancelEdit: () => void;
 }
 
 export function PersonForm({
+  editingPerson,
   isSubmitting,
-  onSubmit,
+  onCreate,
+  onUpdate,
+  onCancelEdit,
 }: PersonFormProps) {
-  const [name, setName] = useState("");
-  const [age, setAge] = useState("");
+  const [name, setName] = useState(
+    editingPerson?.name ?? "",
+  );
+
+  const [age, setAge] = useState(
+    editingPerson ? String(editingPerson.age) : "",
+  );
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -23,23 +41,42 @@ export function PersonForm({
       return;
     }
 
-    const wasCreated = await onSubmit({
+    const personData = {
       name: normalizedName,
       age: parsedAge,
-    });
+    };
 
-    if (wasCreated) {
+    // A edição reaproveita o cadastro atual e preserva o mesmo ID.
+    const wasSaved = editingPerson
+      ? await onUpdate(editingPerson.id, personData)
+      : await onCreate(personData);
+
+    // Os campos são limpos apenas quando o backend confirma a operação.
+    if (wasSaved) {
       setName("");
       setAge("");
     }
+  }
+
+  function handleCancel() {
+    setName("");
+    setAge("");
+    onCancelEdit();
   }
 
   return (
     <section className="card">
       <div className="section-heading">
         <div>
-          <span className="eyebrow">Novo cadastro</span>
-          <h2>Adicionar pessoa</h2>
+          <span className="eyebrow">
+            {editingPerson ? "Editar cadastro" : "Novo cadastro"}
+          </span>
+
+          <h2>
+            {editingPerson
+              ? "Atualizar pessoa"
+              : "Adicionar pessoa"}
+          </h2>
         </div>
       </div>
 
@@ -73,13 +110,30 @@ export function PersonForm({
           />
         </label>
 
-        <button
-          className="primary-button"
-          type="submit"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Cadastrando..." : "Cadastrar pessoa"}
-        </button>
+        <div className="form-actions">
+          <button
+            className="primary-button"
+            type="submit"
+            disabled={isSubmitting}
+          >
+            {isSubmitting
+              ? "Salvando..."
+              : editingPerson
+                ? "Salvar alterações"
+                : "Cadastrar pessoa"}
+          </button>
+
+          {editingPerson && (
+            <button
+              className="secondary-button"
+              type="button"
+              disabled={isSubmitting}
+              onClick={handleCancel}
+            >
+              Cancelar
+            </button>
+          )}
+        </div>
       </form>
     </section>
   );

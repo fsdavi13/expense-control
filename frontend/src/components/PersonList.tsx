@@ -3,12 +3,16 @@ import type { Person } from "../types/person";
 interface PersonListProps {
   persons: Person[];
   deletingPersonId: number | null;
+  editingPersonId: number | null;
+  onEdit: (person: Person) => void;
   onDelete: (person: Person) => Promise<void>;
 }
 
 export function PersonList({
   persons,
   deletingPersonId,
+  editingPersonId,
+  onEdit,
   onDelete,
 }: PersonListProps) {
   return (
@@ -40,7 +44,11 @@ export function PersonList({
 
             <tbody>
               {persons.map((person) => {
-                const isDeleting = deletingPersonId === person.id;
+                const isDeleting =
+                  deletingPersonId === person.id;
+
+                const isEditing =
+                  editingPersonId === person.id;
 
                 return (
                   <tr key={person.id}>
@@ -60,14 +68,25 @@ export function PersonList({
                     <td>{person.age} anos</td>
 
                     <td className="actions-column">
-                      <button
-                        className="danger-button"
-                        type="button"
-                        disabled={isDeleting}
-                        onClick={() => void onDelete(person)}
-                      >
-                        {isDeleting ? "Excluindo..." : "Excluir"}
-                      </button>
+                      <div className="table-actions">
+                        <button
+                          className="edit-button"
+                          type="button"
+                          disabled={isDeleting || isEditing}
+                          onClick={() => onEdit(person)}
+                        >
+                          {isEditing ? "Editando" : "Editar"}
+                        </button>
+
+                        <button
+                          className="danger-button"
+                          type="button"
+                          disabled={isDeleting}
+                          onClick={() => void onDelete(person)}
+                        >
+                          {isDeleting ? "Excluindo..." : "Excluir"}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );

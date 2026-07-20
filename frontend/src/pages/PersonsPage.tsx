@@ -2,11 +2,17 @@ import { useEffect, useState } from "react";
 import { PersonForm } from "../components/PersonForm";
 import { PersonList } from "../components/PersonList";
 import { personService } from "../services/personService";
-import type { CreatePerson, Person } from "../types/person";
+import type {
+  CreatePerson,
+  Person,
+  UpdatePerson,
+} from "../types/person";
 import { getErrorMessage } from "../utils/getErrorMessage";
 
 export function PersonsPage() {
   const [persons, setPersons] = useState<Person[]>([]);
+  const [editingPerson, setEditingPerson] =
+    useState<Person | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingPersonId, setDeletingPersonId] = useState<
@@ -78,6 +84,63 @@ export function PersonsPage() {
     }
   }
 
+  async function handleUpdate(
+    id: number,
+    person: UpdatePerson,
+  ): Promise<boolean> {
+    try {
+      setIsSubmitting(true);
+      setError("");
+      setSuccessMessage("");
+
+      const updatedPerson = await personService.update(
+        id,
+        person,
+      );
+
+      // A lista é atualizada mantendo o mesmo registro e identificador.
+      setPersons((currentPersons) =>
+        currentPersons.map((currentPerson) =>
+          currentPerson.id === id
+            ? updatedPerson
+            : currentPerson,
+        ),
+      );
+
+      setEditingPerson(null);
+      setSuccessMessage("Pessoa atualizada com sucesso.");
+
+      return true;
+    } catch (requestError) {
+      setError(
+        getErrorMessage(
+          requestError,
+          "Não foi possível atualizar a pessoa.",
+        ),
+      );
+
+      return false;
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  function handleEdit(person: Person) {
+    setError("");
+    setSuccessMessage("");
+    setEditingPerson(person);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  function handleCancelEdit() {
+    setEditingPerson(null);
+    setError("");
+  }
+
   async function handleDelete(person: Person) {
     const confirmed = window.confirm(
       `Excluir ${person.name}? As transações dessa pessoa também serão removidas.`,
@@ -99,6 +162,10 @@ export function PersonsPage() {
           (currentPerson) => currentPerson.id !== person.id,
         ),
       );
+
+      if (editingPerson?.id === person.id) {
+        setEditingPerson(null);
+      }
 
       setSuccessMessage("Pessoa excluída com sucesso.");
     } catch (requestError) {
@@ -145,8 +212,12 @@ export function PersonsPage() {
 
       <div className="content-grid">
         <PersonForm
+          key={editingPerson?.id ?? "new-person"}
+          editingPerson={editingPerson}
           isSubmitting={isSubmitting}
-          onSubmit={handleCreate}
+          onCreate={handleCreate}
+          onUpdate={handleUpdate}
+          onCancelEdit={handleCancelEdit}
         />
 
         {isLoading ? (
@@ -157,6 +228,8 @@ export function PersonsPage() {
           <PersonList
             persons={persons}
             deletingPersonId={deletingPersonId}
+            editingPersonId={editingPerson?.id ?? null}
+            onEdit={handleEdit}
             onDelete={handleDelete}
           />
         )}

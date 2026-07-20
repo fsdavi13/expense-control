@@ -401,3 +401,46 @@ tbody tr:last-child td {
     padding: 18px;
   }
 }
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.form-actions button {
+  flex: 1;
+}
+
+.table-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.edit-button {
+  padding: 9px 13px;
+  border: 0;
+  border-radius: 10px;
+  font-weight: 700;
+  color: #1d4ed8;
+  background: #dbeafe;
+  transition:
+    transform 0.15s,
+    filter 0.15s;
+}
+
+.edit-button:hover:not(:disabled) {
+  filter: brightness(0.96);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 620px) {
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .table-actions {
+    align-items: flex-end;
+    flex-direction: column;
+  }
+}

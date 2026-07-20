@@ -2,6 +2,7 @@ using ExpenseControl.Application.DTOs.Person;
 using ExpenseControl.Application.Exceptions;
 using ExpenseControl.Application.Services.Implementations;
 using ExpenseControl.Domain.Entities;
+using ExpenseControl.Domain.Enums;
 using ExpenseControl.Domain.Repositories;
 using ExpenseControl.Tests.Support;
 using Moq;
@@ -11,14 +12,20 @@ namespace ExpenseControl.Tests.Services;
 public sealed class PersonServiceTests
 {
     private readonly Mock<IPersonRepository> _personRepositoryMock;
+    private readonly Mock<ITransactionRepository>
+        _transactionRepositoryMock;
     private readonly PersonService _personService;
 
     public PersonServiceTests()
     {
         _personRepositoryMock = new Mock<IPersonRepository>();
 
+        _transactionRepositoryMock =
+            new Mock<ITransactionRepository>();
+
         _personService = new PersonService(
-            _personRepositoryMock.Object);
+            _personRepositoryMock.Object,
+            _transactionRepositoryMock.Object);
     }
 
     [Fact]
@@ -138,6 +145,142 @@ public sealed class PersonServiceTests
         Assert.Equal(2, result[1].Id);
         Assert.Equal("Carlos Souza", result[1].Name);
         Assert.Equal(32, result[1].Age);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ShouldUpdatePerson_WhenDataIsValid()
+    {
+        var person = TestEntityFactory.CreatePerson(
+            id: 1,
+            name: "Ana Silva",
+            age: 25);
+
+        _personRepositoryMock
+            .Setup(repository => repository.GetByIdAsync(1))
+            .ReturnsAsync(person);
+
+        _personRepositoryMock
+            .Setup(repository =>
+                repository.UpdateAsync(It.IsAny<Person>()))
+            .ReturnsAsync((Person updatedPerson) =>
+                updatedPerson);
+
+        var dto = new UpdatePersonDto
+        {
+            Name = "  Ana Souza  ",
+            Age = 26
+        };
+
+        var result = await _personService.UpdateAsync(1, dto);
+
+        // O teste garante que a edição preserva o mesmo identificador.
+        Assert.Equal(1, result.Id);
+        Assert.Equal("Ana Souza", result.Name);
+        Assert.Equal(26, result.Age);
+
+        _personRepositoryMock.Verify(
+            repository =>
+                repository.UpdateAsync(person),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ShouldThrowNotFoundException_WhenPersonDoesNotExist()
+    {
+        _personRepositoryMock
+            .Setup(repository => repository.GetByIdAsync(999))
+            .ReturnsAsync((Person?)null);
+
+        var dto = new UpdatePersonDto
+        {
+            Name = "Ana Silva",
+            Age = 25
+        };
+
+        await Assert.ThrowsAsync<NotFoundException>(
+            () => _personService.UpdateAsync(999, dto));
+
+        _personRepositoryMock.Verify(
+            repository =>
+                repository.UpdateAsync(It.IsAny<Person>()),
+            Times.Never);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ShouldAllowMinorAge_WhenPersonHasNoIncome()
+    {
+        var person = TestEntityFactory.CreatePerson(
+            id: 1,
+            name: "Ana Silva",
+            age: 20);
+
+        _personRepositoryMock
+            .Setup(repository => repository.GetByIdAsync(1))
+            .ReturnsAsync(person);
+
+        _transactionRepositoryMock
+            .Setup(repository =>
+                repository.GetByPersonIdAsync(1))
+            .ReturnsAsync([]);
+
+        _personRepositoryMock
+            .Setup(repository =>
+                repository.UpdateAsync(person))
+            .ReturnsAsync(person);
+
+        var dto = new UpdatePersonDto
+        {
+            Name = "Ana Silva",
+            Age = 17
+        };
+
+        var result = await _personService.UpdateAsync(1, dto);
+
+        Assert.Equal(17, result.Age);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_ShouldBlockMinorAge_WhenPersonHasIncome()
+    {
+        var person = TestEntityFactory.CreatePerson(
+            id: 1,
+            name: "Ana Silva",
+            age: 20);
+
+        var income = TestEntityFactory.CreateTransaction(
+            id: 1,
+            description: "Salário",
+            amount: 2000m,
+            type: TransactionType.Income,
+            personId: 1);
+
+        _personRepositoryMock
+            .Setup(repository => repository.GetByIdAsync(1))
+            .ReturnsAsync(person);
+
+        _transactionRepositoryMock
+            .Setup(repository =>
+                repository.GetByPersonIdAsync(1))
+            .ReturnsAsync([income]);
+
+        var dto = new UpdatePersonDto
+        {
+            Name = "Ana Silva",
+            Age = 17
+        };
+
+        var exception =
+            await Assert.ThrowsAsync<BusinessException>(
+                () => _personService.UpdateAsync(1, dto));
+
+        Assert.Equal(
+            "Não é possível alterar a pessoa para menor de idade porque ela possui receitas cadastradas.",
+            exception.Message);
+
+        _personRepositoryMock.Verify(
+            repository =>
+                repository.UpdateAsync(It.IsAny<Person>()),
+            Times.Never);
     }
 
     [Fact]

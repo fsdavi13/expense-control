@@ -48,6 +48,26 @@ public sealed class PersonController : ControllerBase
     }
 
     /// <summary>
+    /// Atualiza nome e idade sem alterar o identificador da pessoa.
+    /// </summary>
+    [HttpPut("{id:int}")]
+    [ProducesResponseType(
+        typeof(PersonResponseDto),
+        StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Update(
+        int id,
+        [FromBody] UpdatePersonDto dto)
+    {
+        var person = await _personService.UpdateAsync(
+            id,
+            dto);
+
+        return Ok(person);
+    }
+
+    /// <summary>
     /// Remove uma pessoa e suas transações relacionadas.
     /// </summary>
     [HttpDelete("{id:int}")]

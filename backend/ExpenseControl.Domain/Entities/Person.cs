@@ -1,26 +1,31 @@
 namespace ExpenseControl.Domain.Entities;
 
-public class Person
+public sealed class Person
 {
     public int Id { get; private set; }
 
-    public string Name { get; private set; } = string.Empty;
+    public string Name { get; private set; }
 
     public int Age { get; private set; }
 
-    // Uma pessoa pode possuir várias transações associadas.
-    // Esse relacionamento permite consultar e remover movimentações
-    // financeiras vinculadas ao cadastro da pessoa.
-    public ICollection<Transaction> Transactions { get; private set; } = new List<Transaction>();
+    public ICollection<Transaction> Transactions { get; private set; }
+        = new List<Transaction>();
 
     private Person()
     {
-        // Construtor utilizado pelo Entity Framework Core
-        // durante a criação das entidades a partir do banco.
+        Name = string.Empty;
     }
 
     public Person(string name, int age)
     {
+        Name = name;
+        Age = age;
+    }
+
+    public void Update(string name, int age)
+    {
+        // O identificador não é alterado, preservando as transações
+        // que já estão associadas à pessoa.
         Name = name;
         Age = age;
     }
